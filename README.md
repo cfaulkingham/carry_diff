@@ -69,6 +69,6 @@ matplotlib  # optional, for plots
 
 This isn't a practical addition tool. It's a pedagogical experiment that illustrates:
 
-1. **The cost of learning** — A deterministic task requiring 0 free parameters still costs a neural network hundreds of learned weights. This quantifies the overhead of "not knowing the rules."
+1. **The cost of learning** — A deterministic task requiring 0 free parameters still costs a neural network [hundreds of learned weights](https://github.com/rezabyt/digit-addition-311p). This quantifies the overhead of "not knowing the rules."
 2. **Loss landscape geometry** — The learned threshold values aren't unique; they freeze at arbitrary points in a flat valley once the sigmoid saturates.
 3. **Gradient failure modes** — The `dead` init mode shows that wrong initialization + sharp nonlinearities can make a problem irrecoverable for gradient descent, even when a human could fix it trivially.
