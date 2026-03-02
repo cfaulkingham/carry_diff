@@ -93,7 +93,7 @@ class LearnableCarryDiff(nn.Module):
         carry0 = self._sigmoid(self.scale * (raw - self.carry_out_thresh))
         x = raw - self.ten * carry0
 
-        # 10 denoising steps
+        # 10 carry-propagation steps
         for _ in range(10):
             # Shift right: each position looks at its right neighbour
             raw_right = torch.cat([raw[:, 1:], z], dim=1)

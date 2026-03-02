@@ -4,7 +4,7 @@ import numpy as np
 import random
 
 NUM_DIGITS = 10
-T_STEPS    = 10    # denoising steps = max carry chain in 10-digit addition
+T_STEPS    = 10    # carry-propagation steps = max carry chain in 10-digit addition
 
 # ── 4 Parameters ──────────────────────────────────────────────────────────────
 CARRY_DETECT_THRESH = np.float64(8.5)    # 1 param
@@ -26,12 +26,12 @@ def _sigmoid(x):
 
 class CarryDiff:
     """
-    4-parameter diffusion model for 10-digit addition.
+    4-parameter model for 10-digit addition.
 
-    Architecture: iterative carry-diffusion, T=10 parallel denoising steps.
+    Architecture: iterative carry relaxation, T=10 parallel propagation steps.
     No attention. No FFN. No embeddings.
 
-    Each denoising step, for every output position i in parallel:
+    Each propagation step, for every output position i in parallel:
       1. carry_in[i]  = sigmoid(SCALE × (raw[i+1] − x_t[i+1] − 8.5))
       2. col[i]       = raw[i] + carry_in[i]
       3. carry_out[i] = sigmoid(SCALE × (col[i] − 9.5))
@@ -39,7 +39,7 @@ class CarryDiff:
     """
 
     def _step(self, x: np.ndarray, raw: np.ndarray) -> np.ndarray:
-        """One parallel denoising step. x, raw: [B, 11] float64."""
+        """One parallel carry-propagation step. x, raw: [B, 11] float64."""
         B = x.shape[0]
         pad = np.zeros((B, 1), dtype=np.float64)
 
@@ -70,11 +70,11 @@ class CarryDiff:
         b11 = np.concatenate([z, b], axis=1)   # [B, 11]
         raw = a11 + b11                         # column-wise raw sums, no carry
 
-        # x_T: fully noised state — raw sums mod 10, no carry at all
+        # Initial state: raw sums mod 10, no carries resolved yet
         carry0 = _sigmoid(SCALE * (raw - CARRY_OUT_THRESH))
         x = raw - TEN * carry0   # ≈ raw % 10
 
-        # Reverse diffusion: T parallel denoising steps
+        # Iterative carry propagation: T parallel relaxation steps
         for _ in range(T_STEPS):
             x = self._step(x, raw)
 
@@ -89,9 +89,9 @@ def build_model():
         "name":         "CarryDiff",
         "author":       "Claude (Anthropic)",
         "params":       4,
-        "architecture": f"Diffusion, T={T_STEPS} parallel denoising steps, no attn/FFN/embed",
+        "architecture": f"Iterative carry relaxation, T={T_STEPS} parallel propagation steps, no attn/FFN/embed",
         "tricks": [
-            "Carry uncertainty as diffusion noise",
+            "Carry uncertainty resolved via iterative relaxation",
             "Parallel position updates (all 11 slots per step)",
             "(raw_sum − digit) ∈ {9,10} iff carry — threshold at 8.5",
             "Differentiable modulo via sharp sigmoid",

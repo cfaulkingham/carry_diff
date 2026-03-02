@@ -17,7 +17,7 @@ A **4-parameter "model"** that performs 10-digit addition with 100% accuracy. No
 | `TEN` | 10.0 | The number base |
 | `SCALE` | 1e4 | Sigmoid sharpness — makes it act like a step function |
 
-**How it works:** Takes two 10-digit numbers, computes raw column sums (no carries), then runs 10 iterative "denoising" steps where each position checks its right neighbor for carries and adjusts. After 10 steps, all carries have propagated.
+**How it works:** Takes two 10-digit numbers, computes raw column sums (no carries), then runs 10 iterative carry-propagation steps where each position checks its right neighbor for carries and adjusts. After 10 steps, all carries have propagated.
 
 ```bash
 python carrydiff.py
@@ -72,7 +72,3 @@ This isn't a practical addition tool. It's a pedagogical experiment that illustr
 1. **The cost of learning** — A deterministic task requiring 0 free parameters still costs a neural network hundreds of learned weights. This quantifies the overhead of "not knowing the rules."
 2. **Loss landscape geometry** — The learned threshold values aren't unique; they freeze at arbitrary points in a flat valley once the sigmoid saturates.
 3. **Gradient failure modes** — The `dead` init mode shows that wrong initialization + sharp nonlinearities can make a problem irrecoverable for gradient descent, even when a human could fix it trivially.
-
-## Note on "Diffusion" Branding
-
-Despite the name, this is **not** a diffusion model in the machine learning sense (no learned score network, no noise schedule). It's an iterative fixed-point relaxation algorithm. The "diffusion" label refers to the metaphor of carry uncertainty being iteratively resolved, not the generative modeling framework.
