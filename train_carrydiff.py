@@ -47,7 +47,7 @@ class LearnableCarryDiff(nn.Module):
 
         if init_mode == 'correct':
             # Initialise at the known-correct values (sanity check)
-            self.carry_detect_thresh = nn.Parameter(torch.tensor(8.5))
+            self.carry_detect_thresh = nn.Parameter(torch.tensor(6.5))
             self.carry_out_thresh    = nn.Parameter(torch.tensor(9.5))
             self.ten                 = nn.Parameter(torch.tensor(10.0))
             self.scale               = nn.Parameter(torch.tensor(100.0))  # start lower
