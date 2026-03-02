@@ -12,7 +12,7 @@ A **4-parameter "model"** that performs 10-digit addition with 100% accuracy. No
 
 | Parameter | Value | Role |
 |---|---|---|
-| `CARRY_DETECT_THRESH` | 8.5 | Separates "no carry" (0) from "carry" (10) — any value in (0, 9) works |
+| `CARRY_DETECT_THRESH` | 6.5 | Separates "no carry" (0) from "carry" (10) — any value in (0, 9) works |
 | `CARRY_OUT_THRESH` | 9.5 | Detects column overflow — any value in (9, 10) works |
 | `TEN` | 10.0 | The number base |
 | `SCALE` | 1e4 | Sigmoid sharpness — makes it act like a step function |
