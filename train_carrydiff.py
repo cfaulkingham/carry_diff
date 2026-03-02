@@ -21,7 +21,7 @@ USAGE
 OUTPUT
 ──────
   Logs parameter values and accuracy every 500 steps.
-  Final plot saved to results/carrydiff_threshold_training.png
+  Final plot saved to results/carrydiff_thresholds/threshold_training.png
 """
 
 import argparse
@@ -218,8 +218,9 @@ def train(args):
                 valid_cdt   = 0 < cdt < 9
                 valid_cot   = 9 < cot < 10
                 valid_ten   = abs(ten - 10) < 0.5
-                valid_scale = scale > 10
-                all_valid   = valid_cdt and valid_cot and valid_ten and valid_scale
+                behavior_ok = acc >= 0.99      # actual task success
+                scale_large = scale > 10       # diagnostic only
+                all_valid = valid_cdt and valid_cot and valid_ten and behavior_ok
 
                 history['step'].append(step)
                 history['loss'].append(loss.item())
@@ -229,7 +230,7 @@ def train(args):
                 history['ten'].append(ten)
                 history['scale'].append(scale)
 
-                valid_str = '✓ all' if all_valid else f'{"✓" if valid_cdt else "✗"}cdt {"✓" if valid_cot else "✗"}cot {"✓" if valid_ten else "✗"}ten {"✓" if valid_scale else "✗"}sc'
+                valid_str = '✓ all' if all_valid else f'{"✓" if valid_cdt else "✗"}cdt {"✓" if valid_cot else "✗"}cot {"✓" if valid_ten else "✗"}ten {"✓" if scale_large else "✗"}sc'
 
                 print(f"  {step:>7,}  {loss.item():>8.4f}  {100*acc:>6.1f}%  {cdt:>7.4f}  {cot:>7.4f}  {ten:>7.4f}  {scale:>8.2f}  {valid_str}")
 

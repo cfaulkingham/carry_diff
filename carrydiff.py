@@ -32,7 +32,7 @@ class CarryDiff:
     No attention. No FFN. No embeddings.
 
     Each propagation step, for every output position i in parallel:
-      1. carry_in[i]  = sigmoid(SCALE × (raw[i+1] − x_t[i+1] − 8.5))
+      1. carry_in[i]  = sigmoid(SCALE × (raw[i+1] − x_t[i+1] − 6.5))
       2. col[i]       = raw[i] + carry_in[i]
       3. carry_out[i] = sigmoid(SCALE × (col[i] − 9.5))
       4. x_new[i]     = col[i] − 10 × carry_out[i]
