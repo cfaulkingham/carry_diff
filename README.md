@@ -42,6 +42,8 @@ Tests 4 initialization modes:
 
 The `dead` mode is the most interesting result: `carry_detect_thresh` starts outside the valid range with a very sharp sigmoid, creating near-zero gradients. It never moves. This is a clean, minimal example of an irrecoverable gradient desert.
 
+![Threshold Training](results/carrydiff_thresholds/threshold_training.png)
+
 ```bash
 # Run all 4 init modes (~16s on CPU)
 python train_carrydiff.py --device cpu --init all
