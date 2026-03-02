@@ -7,7 +7,7 @@ NUM_DIGITS = 10
 T_STEPS    = 10    # carry-propagation steps = max carry chain in 10-digit addition
 
 # ── 4 Parameters ──────────────────────────────────────────────────────────────
-CARRY_DETECT_THRESH = np.float64(8.5)    # 1 param
+CARRY_DETECT_THRESH = np.float64(6.5)    # 1 param
 CARRY_OUT_THRESH    = np.float64(9.5)    # 1 param
 TEN                 = np.float64(10.0)   # 1 param
 SCALE               = np.float64(1e4)    # 1 param
@@ -93,7 +93,7 @@ def build_model():
         "tricks": [
             "Carry uncertainty resolved via iterative relaxation",
             "Parallel position updates (all 11 slots per step)",
-            "(raw_sum − digit) ∈ {9,10} iff carry — threshold at 8.5",
+            "(raw_sum − digit) ∈ {9,10} iff carry — threshold at 6.5",
             "Differentiable modulo via sharp sigmoid",
             "float64 precision",
         ],
